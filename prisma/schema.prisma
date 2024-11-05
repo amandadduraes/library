@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int     @id @default(autoincrement())
+  email     String  @unique
+  name      String?
+  posts     Post[]  // Relação com o modelo `Post`
+}
+
+model UserLibrary {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  name      String?
+  favorites Favorite[]
+  rentals   Rental[]
+}
+
+model Post {
+  id      Int    @id @default(autoincrement())
+  title   String
+  content String
+  userId  Int
+  user    User   @relation(fields: [userId], references: [id]) // Relacionado ao modelo `User`
+}
+
+model Book {
+  id          Int         @id @default(autoincrement())
+  title       String
+  author      String
+  description String
+  imageUrl    String
+  favorites   Favorite[]   // Relação com favoritos
+  rentals     Rental[]     // Relação com aluguéis
+  isAvailable Boolean  @default(true) // Certifique-se de que isso está presente
+  reservedBy  String?  // Adicione se você quiser manter o controle sobre quem reservou
+}
+
+model Favorite {
+  id       Int         @id @default(autoincrement())
+  userId   Int
+  bookId   Int
+  user     UserLibrary @relation(fields: [userId], references: [id])
+  book     Book        @relation(fields: [bookId], references: [id])
+  @@unique([userId, bookId])
+}
+
+
+
+model Rental {
+  id        Int         @id @default(autoincrement())
+  userId    Int
+  bookId    Int
+  rentedAt  DateTime    @default(now())
+  returned  Boolean     @default(false)
+  user      UserLibrary @relation(fields: [userId], references: [id]) // Relacionado ao modelo `UserLibrary`
+  book      Book        @relation(fields: [bookId], references: [id])
+}
+
+
+model Login {
+  id           Int      @id @default(autoincrement())
+  username String @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
