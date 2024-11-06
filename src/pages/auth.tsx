@@ -1,10 +1,11 @@
 import { useAuth } from "@/context/AuthContext";
 import { useState } from "react";
+import Link from 'next/link';
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { login, errorMessage } = useAuth(); 
+  const { login, errorMessage } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,12 +20,11 @@ export default function LoginPage() {
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
           Ou{" "}
-          <a
-            href="/register"
-            className="font-medium text-blue-600 hover:text-blue-500"
-          >
-            cadastre-se aqui
-          </a>
+          <Link href="/register">
+            <a className="font-medium text-blue-600 hover:text-blue-500">
+              cadastre-se aqui
+            </a>
+          </Link>
         </p>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">

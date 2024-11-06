@@ -53,3 +53,5 @@ export const authRouter = t.router({
       return { message: "Login bem-sucedido", userId: user.id, username: user.username };
     }),
 });
+
+
